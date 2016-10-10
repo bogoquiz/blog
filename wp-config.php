@@ -18,21 +18,32 @@
  * @package WordPress
  */
 
+// Sendgrid settings - Read in the sendgrid auth from the config //
+define('SENDGRID_USERNAME', $_ENV["SENDGRID_USERNAME"]);
+define('SENDGRID_PASSWORD', $_ENV["SENDGRID_PASSWORD"]); 
+  
+// S3 Config Info - read the S3 Access Keys from the config //
+define( 'AWS_ACCESS_KEY_ID', $_ENV["AWS_ACCESS_KEY_ID"]);
+define( 'AWS_SECRET_ACCESS_KEY', $_ENV["AWS_SECRET_ACCESS_KEY"]); 
+ 
+// ** ClearDB settings - from Heroku Environment ** //
+$db = parse_url($_ENV["CLEARDB_DATABASE_URL"]); 
+
 // ** MySQL settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-define('DB_NAME', 'wpt');
+define('DB_NAME', trim($db["path"],"/"));
 
 /** MySQL database username */
-define('DB_USER', 'root');
+define('DB_USER', $db["user"]);
 
 /** MySQL database password */
-define('DB_PASSWORD', '');
+define('DB_PASSWORD', $db["pass"]);
 
 /** MySQL hostname */
-define('DB_HOST', 'localhost');
+define('DB_HOST', $db["host"]);
 
 /** Database Charset to use in creating database tables. */
-define('DB_CHARSET', 'utf8mb4');
+define('DB_CHARSET', 'utf8');
 
 /** The Database Collate type. Don't change this if in doubt. */
 define('DB_COLLATE', '');
@@ -46,24 +57,34 @@ define('DB_COLLATE', '');
  *
  * @since 2.6.0
  */
-define('AUTH_KEY',         '0yYQ5mJ6ag, zO+?/T-SZpG3!U8zD^LMq?DBdr`7QMV&?CTAZg|8&yw5S51co8Gn');
-define('SECURE_AUTH_KEY',  'u|y9{bk=C|~{ M=itW|cW/3&LamLz9_^J~p#aZh5([v`q{cS9[en8O!tY9H%mw &');
-define('LOGGED_IN_KEY',    'yXTW|G:8kmAF.UMjpu;reUc{c _V*bYFy n]_a0;?rC@Q5BzD>QNQXPZ3#hecg>q');
-define('NONCE_KEY',        'S4)vdva&0*4}q&4%8T|`73ki+7c)X`e}sgeY^h<5Vtj}h-Rjv@%X6I~w8K~aT-Pk');
-define('AUTH_SALT',        '8zruSPqU8cxe*ln*E3VPbQ$,E`/`]S1FI*<QTm7p!6D;~*j+RnSPeNg]&x+Rn8/A');
-define('SECURE_AUTH_SALT', 'j/wYnmK!RtEYsB)=][yhHey?tyb*g:4Z1:[I22J(w~+4krd%o8K;mS,hBL2U+tp:');
-define('LOGGED_IN_SALT',   '&6/)6P!cntFU=]CT,6^7LT-2qu[lw0EWpR6k|&SF~&:&2/&tVYeu%( 6 h% AUg0');
-define('NONCE_SALT',       'TCB=f=![yTp/,|pNT~jY?o-<J@qIoM(8&9-K#xe3RE`Qd3(:ULa)qw5|oa>Jl?Do');
+define('AUTH_KEY',         $_ENV["AUTH_KEY"]);
+define('SECURE_AUTH_KEY',  $_ENV["SECURE_AUTH_KEY"]);
+define('LOGGED_IN_KEY',    $_ENV["LOGGED_IN_KEY"]);
+define('NONCE_KEY',        $_ENV["NONCE_KEY"]);
+define('AUTH_SALT',        $_ENV["AUTH_SALT"]);
+define('SECURE_AUTH_SALT', $_ENV["SECURE_AUTH_SALT"]);
+define('LOGGED_IN_SALT',   $_ENV["LOGGED_IN_SALT"]);
+define('NONCE_SALT',       $_ENV["NONCE_SALT"]);
 
 /**#@-*/
 
 /**
  * WordPress Database Table prefix.
  *
- * You can have multiple installations in one database if you give each
- * a unique prefix. Only numbers, letters, and underscores please!
+ * You can have multiple installations in one database if you give each a unique
+ * prefix. Only numbers, letters, and underscores please!
  */
 $table_prefix  = 'wp_';
+
+/**
+ * WordPress Localized Language, defaults to English.
+ *
+ * Change this to localize WordPress. A corresponding MO file for the chosen
+ * language must be installed to wp-content/languages. For example, install
+ * de_DE.mo to wp-content/languages and set WPLANG to 'de_DE' to enable German
+ * language support.
+ */
+define('WPLANG', 'en');
 
 /**
  * For developers: WordPress debugging mode.
@@ -71,13 +92,9 @@ $table_prefix  = 'wp_';
  * Change this to true to enable the display of notices during development.
  * It is strongly recommended that plugin and theme developers use WP_DEBUG
  * in their development environments.
- *
- * For information on other constants that can be used for debugging,
- * visit the Codex.
- *
- * @link https://codex.wordpress.org/Debugging_in_WordPress
  */
 define('WP_DEBUG', false);
+define( 'WP_AUTO_UPDATE_CORE', false );
 
 /* That's all, stop editing! Happy blogging. */
 
